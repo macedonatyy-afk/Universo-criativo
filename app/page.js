@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <main className="pagina">
       <section className="cartao">
-        <h1>Universo Criativo</h1>
+        <h1>Meu Universo Criativo ✨</h1>
         <p className="descricao">Compartilhe uma ideia e veja sua mensagem aparecer aqui!</p>
         <form onSubmit={analisar}>
           <label htmlFor="texto">Digite sua ideia:</label>
