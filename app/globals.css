@@ -15,10 +15,22 @@ body { margin: 0; font-family: Arial, sans-serif; color: var(--texto); backgroun
 h1 { font-size: clamp(2rem, 6vw, 3rem); margin: 0 0 12px; color: var(--principal); }
 .descricao { line-height: 1.6; margin-bottom: 28px; }
 label { display: block; font-weight: bold; margin-bottom: 10px; }
-textarea { display: block; width: 100%; padding: 14px; border: 2px solid var(--borda); border-radius: 10px; font: inherit; resize: vertical; }
-textarea:focus { outline: 2px solid var(--principal); outline-offset: 2px; }
+textarea, input { display: block; width: 100%; padding: 14px; border: 2px solid var(--borda); border-radius: 10px; font: inherit; }
+textarea { resize: vertical; }
+input { margin-bottom: 20px; }
+textarea:focus, input:focus { outline: 2px solid var(--principal); outline-offset: 2px; }
 button { margin-top: 16px; padding: 12px 28px; border: 0; border-radius: 10px; color: white; background: var(--principal); font: inherit; font-weight: bold; cursor: pointer; }
 button:hover { background: var(--principal-hover); }
+button:disabled { opacity: .6; cursor: wait; }
+button.secundario { background: transparent; color: var(--principal); border: 2px solid var(--principal); }
+button.secundario:hover { background: var(--fundo); }
+.acoes-login { display: flex; flex-wrap: wrap; gap: 12px; }
+.erro { color: #a21c35; line-height: 1.5; }
+.ajuda { font-size: .9rem; line-height: 1.5; }
+.topo { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 24px; background: var(--cartao); }
+.topo button { margin-top: 0; }
+.email-usuario { overflow-wrap: anywhere; min-width: 0; }
+.topo + .pagina { min-height: calc(100vh - 90px); }
 .resultado { margin-top: 32px; padding: 20px; min-height: 120px; border: 2px solid var(--borda); border-radius: 12px; }
 h2 { margin: 0 0 12px; font-size: 1.2rem; }
 .conteudo-resposta { white-space: pre-wrap; overflow-wrap: anywhere; }
