@@ -29,7 +29,17 @@ Envie estes arquivos para o repositório GitHub `macedonatyy-afk/Universo-criati
 
 ## Personalizar
 
-- Título e textos: `app/page.js`
+- Título, campos, botão, modelo e instruções da IA: `desafio.js`
 - Cores e aparência: `app/globals.css`
 
-O botão **Analisar** apenas repete o texto digitado, sem enviar dados para nenhum servidor.
+## Isso é golpe? — Etapa B
+
+`desafio.js` configura a tela e o comportamento da análise. A rota autenticada `POST /api/ia` recebe `{ "campos": { "mensagem": "texto suspeito" } }` e devolve apenas o texto da resposta. A chave da OpenRouter nunca é enviada ao navegador.
+
+O projeto começa com `modoTeste: true`: o formulário mostra uma resposta de exemplo, explicitamente identificada, sem chamar a OpenRouter e sem gastar a cota. O exemplo não classifica de verdade a mensagem enviada.
+
+Depois de conferir esse teste, cadastre `OPENROUTER_API_KEY` na Vercel, altere `modoTeste` para `false` em `desafio.js` e publique novamente. O servidor usa o modelo `openrouter/free` com `max_tokens: 900`. Erros de limite de uso, chave inválida e conexão são exibidos em português.
+
+Nesta etapa as mensagens e respostas ainda não são salvas no banco; o histórico será implementado na Etapa C. Por isso, o aviso da tela inclui a orientação sobre IA da apostila, sem afirmar que já existe armazenamento privado. A dupla criou as políticas na tabela `resposta` (singular); confirme esse nome antes de implementar o histórico.
+
+Execute `npm test` para validar a configuração do Supabase e o fluxo de análise. Os testes simulam a OpenRouter e não utilizam chaves reais nem consomem cota.
