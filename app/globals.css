@@ -31,7 +31,14 @@ button.secundario:hover { background: var(--fundo); }
 .topo button { margin-top: 0; }
 .email-usuario { overflow-wrap: anywhere; min-width: 0; }
 .topo + .pagina { min-height: calc(100vh - 90px); }
+.navegacao { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.navegacao a, .paginacao a { color: var(--principal); font-weight: bold; }
+.pagina-historico { align-items: start; }
+.historico-lista { list-style: none; padding: 0; }
+.registro-historico { border: 2px solid var(--borda); border-radius: 12px; padding: 20px; margin: 24px 0; }
+.registro-historico h3 { font-size: 1rem; margin-top: 20px; }
+.paginacao { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; margin: 24px 0; }
 .resultado { margin-top: 32px; padding: 20px; min-height: 120px; border: 2px solid var(--borda); border-radius: 12px; }
 h2 { margin: 0 0 12px; font-size: 1.2rem; }
 .conteudo-resposta { white-space: pre-wrap; overflow-wrap: anywhere; }
-@media (max-width: 480px) { .cartao { padding: 22px; } }
+@media (max-width: 480px) { .cartao { padding: 22px; } .topo { flex-wrap: wrap; } }

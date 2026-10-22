@@ -42,6 +42,14 @@ Cadastre `OPENROUTER_API_KEY` na Vercel antes de publicar com `modoTeste: false`
 
 A chamada solicita raciocínio interno desativado aos modelos compatíveis, reservando o orçamento para a resposta final. Retornos em blocos de texto e erros no corpo de respostas HTTP 200 também são tratados. Respostas vazias ou incompletas não são exibidas como análises concluídas. Os logs técnicos de falha registram apenas códigos e contadores, sem a mensagem enviada, raciocínio interno ou chaves. Não há repetição automática de chamadas, para preservar a cota.
 
-Nesta etapa as mensagens e respostas ainda não são salvas no banco; o histórico será implementado na Etapa C. Por isso, o aviso da tela inclui a orientação sobre IA da apostila, sem afirmar que já existe armazenamento privado. A dupla criou as políticas na tabela `resposta` (singular); confirme esse nome antes de implementar o histórico.
+## Histórico — Etapa C
 
-Execute `npm test` para validar a configuração do Supabase e o fluxo de análise. Os testes simulam a OpenRouter e não utilizam chaves reais nem consomem cota.
+Cada análise concluída salva na tabela **`resposta` (singular)**, onde a dupla criou as políticas: `entrada` contém os campos com seus rótulos e `resposta` contém o texto da IA. O cliente Supabase usa a sessão da pessoa conectada. O código não recebe `user_id` do navegador: o banco deve preenchê-lo com `auth.uid()`. Resultados do modo de teste também são salvos quando esse modo é ativado.
+
+O link **Meu histórico** abre `/historico`, protegido por login. A lista mostra somente a pessoa autenticada, ordena pelas mais recentes, preserva as quebras de linha e mostra data e hora de Brasília. Há paginação de 20 registros. Se o salvamento falhar, a análise continua visível com um aviso para copiá-la; nenhuma nova chamada à IA é feita automaticamente.
+
+A tabela deve ter as colunas `id`, `user_id` (padrão `auth.uid()`), `entrada`, `resposta` e `criado_em`, com RLS ativado. As políticas de SELECT e INSERT devem restringir `auth.uid() = user_id`, conforme a apostila. Não basta apenas filtrar a tela: confirme as políticas no Supabase para proteger também acesso direto ao banco. Não use chave `service_role`.
+
+Para testar no Supabase real: faça duas análises com a conta A e confira as duas no histórico. Em uma janela anônima, faça uma análise com a conta B: ela deve ver somente uma. Sem sessão, `/historico` deve redirecionar para `/login`. Análises feitas antes desta implementação não foram salvas e não aparecerão retroativamente.
+
+Execute `npm test` para validar a configuração do Supabase, o fluxo de análise e o salvamento, ordenação e separação dos históricos. Os testes usam serviços simulados e não utilizam chaves reais nem consomem cota. Eles não substituem a verificação das políticas RLS no projeto Supabase real.

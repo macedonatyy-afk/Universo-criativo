@@ -29,7 +29,7 @@ export async function middleware(request) {
   }
 
   const pathname = request.nextUrl.pathname;
-  const destination = !user && pathname === '/' ? '/login' :
+  const destination = !user && (pathname === '/' || pathname === '/historico') ? '/login' :
     user && pathname === '/login' && request.method === 'GET' ? '/' : null;
 
   if (destination) {
@@ -40,4 +40,4 @@ export async function middleware(request) {
   return response;
 }
 
-export const config = { matcher: ['/', '/login'] };
+export const config = { matcher: ['/', '/login', '/historico'] };

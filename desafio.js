@@ -7,7 +7,7 @@ export const desafio = {
   ],
   modelo: 'openrouter/free',
   modoTeste: false,
-  aviso: 'Esta resposta foi escrita por uma inteligência artificial e pode conter erros. Use como ajuda, não como decisão final.',
+  aviso: 'Esta resposta foi escrita por uma inteligência artificial e pode conter erros. Use como ajuda, não como decisão final. O que você digitar fica guardado na sua conta e só você consegue ver.',
   prompt: `Você analisa mensagens suspeitas (SMS, WhatsApp, e-mail) e ajuda pessoas sem conhecimento técnico a identificar golpes.
 
 Quem vai ler sua resposta: uma pessoa adulta, possivelmente idosa, assustada, com pouca familiaridade com internet.

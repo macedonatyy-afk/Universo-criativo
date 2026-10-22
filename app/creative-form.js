@@ -7,6 +7,7 @@ export default function CreativeForm() {
   const [campos, setCampos] = useState({});
   const [resposta, setResposta] = useState('');
   const [erro, setErro] = useState('');
+  const [avisoHistorico, setAvisoHistorico] = useState('');
   const [analisando, setAnalisando] = useState(false);
 
   async function analisar(evento) {
@@ -14,6 +15,7 @@ export default function CreativeForm() {
     if (analisando) return;
     setAnalisando(true);
     setErro('');
+    setAvisoHistorico('');
     setResposta('');
     try {
       const response = await fetch('/api/ia', {
@@ -27,6 +29,9 @@ export default function CreativeForm() {
         return;
       }
       setResposta(text);
+      if (response.headers.get('X-History-Saved') === 'false') {
+        setAvisoHistorico('A análise foi concluída, mas não foi possível salvar no histórico. Copie a resposta para não perdê-la.');
+      }
     } catch {
       setErro('Não foi possível enviar a mensagem. Verifique sua conexão e tente novamente.');
     } finally {
@@ -62,6 +67,7 @@ export default function CreativeForm() {
           <p className="ajuda">{desafio.aviso}</p>
         </form>
         {erro && <p className="erro" role="alert">{erro}</p>}
+        {avisoHistorico && <p className="erro" role="alert">{avisoHistorico}</p>}
         <div className="resultado" aria-live="polite">
           <h2>Resposta</h2>
           <div className="conteudo-resposta">{resposta}</div>

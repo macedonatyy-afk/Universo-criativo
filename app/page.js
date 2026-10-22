@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '../lib/supabase/server';
 import CreativeForm from './creative-form';
-import SignOutButton from './sign-out-button';
+import SiteHeader from './site-header';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,10 +20,7 @@ export default async function Home() {
 
   return (
     <>
-      <header className="topo">
-        <span className="email-usuario">{user.email}</span>
-        <SignOutButton />
-      </header>
+      <SiteHeader email={user.email} />
       <CreativeForm />
     </>
   );

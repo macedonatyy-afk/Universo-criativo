@@ -1,16 +1,19 @@
 import { desafio } from '../../../desafio';
 import { analyze, AnalysisError } from '../../../lib/ia';
 import { createClient } from '../../../lib/supabase/server';
+import { saveAnalysis } from '../../../lib/historico';
+import { revalidatePath } from 'next/cache';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 
-function textResponse(text, status = 200) {
+function textResponse(text, status = 200, extraHeaders = {}) {
   return new Response(text, {
     status,
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
       'Cache-Control': 'no-store',
+      ...extraHeaders,
     },
   });
 }
@@ -41,7 +44,9 @@ export async function POST(request) {
       config: desafio,
       apiKey: process.env.OPENROUTER_API_KEY,
     });
-    return textResponse(text);
+    const saved = await saveAnalysis(supabase, { campos: body.campos, config: desafio, resposta: text });
+    if (saved) revalidatePath('/historico');
+    return textResponse(text, 200, { 'X-History-Saved': String(saved) });
   } catch (error) {
     if (error instanceof AnalysisError) {
       if (error.diagnostic) console.warn('[ia] Falha no retorno da OpenRouter', error.diagnostic);
