@@ -6,7 +6,7 @@ export const desafio = {
     { id: 'mensagem', rotulo: 'Cole aqui a mensagem que você recebeu', linhas: 6 },
   ],
   modelo: 'openrouter/free',
-  modoTeste: true,
+  modoTeste: false,
   aviso: 'Esta resposta foi escrita por uma inteligência artificial e pode conter erros. Use como ajuda, não como decisão final.',
   prompt: `Você analisa mensagens suspeitas (SMS, WhatsApp, e-mail) e ajuda pessoas sem conhecimento técnico a identificar golpes.
 

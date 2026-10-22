@@ -9,7 +9,7 @@ const liveConfig = { ...desafio, modoTeste: false };
 test('modo de teste funciona sem chave e nunca chama a OpenRouter', async () => {
   const text = await analyze({
     campos,
-    config: desafio,
+    config: { ...desafio, modoTeste: true },
     fetchImpl: () => assert.fail('Não deve chamar a IA no modo de teste.'),
   });
   assert.match(text, /MODO DE TESTE/);

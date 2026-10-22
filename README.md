@@ -36,9 +36,9 @@ Envie estes arquivos para o repositório GitHub `macedonatyy-afk/Universo-criati
 
 `desafio.js` configura a tela e o comportamento da análise. A rota autenticada `POST /api/ia` recebe `{ "campos": { "mensagem": "texto suspeito" } }` e devolve apenas o texto da resposta. A chave da OpenRouter nunca é enviada ao navegador.
 
-O projeto começa com `modoTeste: true`: o formulário mostra uma resposta de exemplo, explicitamente identificada, sem chamar a OpenRouter e sem gastar a cota. O exemplo não classifica de verdade a mensagem enviada.
+O teste inicial com `modoTeste: true` já foi concluído. Agora `modoTeste: false` ativa a análise pela OpenRouter. Para voltar a testar sem gastar cota, altere para `true`: o formulário mostra uma resposta de exemplo, explicitamente identificada, sem chamar a OpenRouter. O exemplo não classifica de verdade a mensagem enviada.
 
-Depois de conferir esse teste, cadastre `OPENROUTER_API_KEY` na Vercel, altere `modoTeste` para `false` em `desafio.js` e publique novamente. O servidor usa o modelo `openrouter/free` com `max_tokens: 900`. Erros de limite de uso, chave inválida e conexão são exibidos em português.
+Cadastre `OPENROUTER_API_KEY` na Vercel antes de publicar com `modoTeste: false`. O servidor usa o modelo `openrouter/free` com `max_tokens: 900`. Erros de limite de uso, chave inválida e conexão são exibidos em português.
 
 Nesta etapa as mensagens e respostas ainda não são salvas no banco; o histórico será implementado na Etapa C. Por isso, o aviso da tela inclui a orientação sobre IA da apostila, sem afirmar que já existe armazenamento privado. A dupla criou as políticas na tabela `resposta` (singular); confirme esse nome antes de implementar o histórico.
 
