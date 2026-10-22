@@ -40,6 +40,8 @@ O teste inicial com `modoTeste: true` já foi concluído. Agora `modoTeste: fals
 
 Cadastre `OPENROUTER_API_KEY` na Vercel antes de publicar com `modoTeste: false`. O servidor usa o modelo `openrouter/free` com `max_tokens: 900`. Erros de limite de uso, chave inválida e conexão são exibidos em português.
 
+A chamada solicita raciocínio interno desativado aos modelos compatíveis, reservando o orçamento para a resposta final. Retornos em blocos de texto e erros no corpo de respostas HTTP 200 também são tratados. Respostas vazias ou incompletas não são exibidas como análises concluídas. Os logs técnicos de falha registram apenas códigos e contadores, sem a mensagem enviada, raciocínio interno ou chaves. Não há repetição automática de chamadas, para preservar a cota.
+
 Nesta etapa as mensagens e respostas ainda não são salvas no banco; o histórico será implementado na Etapa C. Por isso, o aviso da tela inclui a orientação sobre IA da apostila, sem afirmar que já existe armazenamento privado. A dupla criou as políticas na tabela `resposta` (singular); confirme esse nome antes de implementar o histórico.
 
 Execute `npm test` para validar a configuração do Supabase e o fluxo de análise. Os testes simulam a OpenRouter e não utilizam chaves reais nem consomem cota.

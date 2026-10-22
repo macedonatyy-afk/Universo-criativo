@@ -43,7 +43,10 @@ export async function POST(request) {
     });
     return textResponse(text);
   } catch (error) {
-    if (error instanceof AnalysisError) return textResponse(error.message, error.status);
+    if (error instanceof AnalysisError) {
+      if (error.diagnostic) console.warn('[ia] Falha no retorno da OpenRouter', error.diagnostic);
+      return textResponse(error.message, error.status);
+    }
     return textResponse('Não foi possível concluir a análise. Tente novamente.', 500);
   }
 }

@@ -50,6 +50,7 @@ test('envia modelo, 900 tokens e substituições literais; devolve só o texto',
       const body = JSON.parse(options.body);
       assert.equal(body.model, desafio.modelo);
       assert.equal(body.max_tokens, 900);
+      assert.deepEqual(body.reasoning, { enabled: false, exclude: true });
       assert.equal(body.messages[0].content, 'Custa $& e {outro}\ntexto adicional\nCusta $& e {outro}');
       return Response.json({ choices: [{ message: { content: 'VEREDITO: SUSPEITO\n\nPOR QUE: exemplo' } }] });
     },
@@ -85,4 +86,49 @@ test('rejeita resposta vazia ou inválida sem exibir sucesso', async () => {
       campos, config: liveConfig, apiKey: 'chave-ficticia', fetchImpl: async () => response,
     }), error => error instanceof AnalysisError && error.status === 502);
   }
+});
+
+test('aceita resposta final em blocos de texto e não exibe raciocínio interno', async () => {
+  const text = await analyze({
+    campos, config: liveConfig, apiKey: 'chave-ficticia',
+    fetchImpl: async () => Response.json({ choices: [{ message: {
+      content: [{ type: 'text', text: 'VEREDITO: SUSPEITO' }, { type: 'reasoning', text: 'Raciocínio privado' }, { type: 'text', text: 'POR QUE: há cobrança urgente.' }],
+      reasoning: 'Raciocínio privado',
+    } }] }),
+  });
+  assert.equal(text, 'VEREDITO: SUSPEITO\nPOR QUE: há cobrança urgente.');
+});
+
+test('identifica orçamento esgotado em raciocínio sem aceitar resposta vazia', async () => {
+  await assert.rejects(analyze({
+    campos, config: liveConfig, apiKey: 'chave-ficticia',
+    fetchImpl: async () => Response.json({
+      choices: [{ finish_reason: 'length', message: { content: null, reasoning: 'Não exibir' } }],
+      usage: { completion_tokens: 900, completion_tokens_details: { reasoning_tokens: 900 } },
+    }),
+  }), error => {
+    assert.equal(error.status, 502);
+    assert.equal(error.diagnostic.kind, 'output_limit');
+    assert.equal(error.diagnostic.reasoningTokens, 900);
+    assert.match(error.message, /limite antes de concluir/);
+    assert.ok(!JSON.stringify(error.diagnostic).includes('Não exibir'));
+    return true;
+  });
+});
+
+test('traduz falhas devolvidas dentro de HTTP 200', async () => {
+  for (const [code, expected] of [[429, 'Você atingiu o limite de uso de hoje.'], [401, 'Chave da IA inválida.']]) {
+    for (const result of [{ error: { code, message: 'Private provider error' } }, { choices: [{ error: { code: String(code) } }] }]) {
+      await assert.rejects(analyze({
+        campos, config: liveConfig, apiKey: 'chave-ficticia', fetchImpl: async () => Response.json(result),
+      }), { status: code, message: expected });
+    }
+  }
+});
+
+test('traduz recusa do provedor em vez de tratar como resposta vazia', async () => {
+  await assert.rejects(analyze({
+    campos, config: liveConfig, apiKey: 'chave-ficticia',
+    fetchImpl: async () => Response.json({ choices: [{ finish_reason: 'content_filter', message: { content: null } }] }),
+  }), { status: 422, message: 'A IA não pôde analisar esse conteúdo. Reformule a mensagem e tente novamente.' });
 });
