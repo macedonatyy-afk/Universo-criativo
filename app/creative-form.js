@@ -1,14 +1,31 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { desafio } from '../desafio';
 
+const exemplos = [
+  { nome: 'SMS do banco', mensagem: 'BANCO EXEMPLO: detectamos uma compra suspeita. Sua conta será bloqueada em 10 minutos. Envie sua senha e o código recebido por SMS para cancelar a compra.' },
+  { nome: 'Prêmio', mensagem: 'PARABÉNS! Você ganhou R$ 5.000 em um sorteio exclusivo. Para liberar seu prêmio, faça um Pix de R$ 29,90 como taxa de cadastro. A oferta termina hoje!' },
+  { nome: 'Entrega dos Correios', mensagem: 'ENTREGA EXEMPLO: sua encomenda está retida. Pague uma taxa de R$ 4,80 pelo link desta mensagem em até 24 horas ou o pacote será devolvido. Informe também os dados do seu cartão.' },
+];
+
 export default function CreativeForm() {
+  const mensagemRef = useRef(null);
   const [campos, setCampos] = useState({});
   const [resposta, setResposta] = useState('');
   const [erro, setErro] = useState('');
   const [avisoHistorico, setAvisoHistorico] = useState('');
   const [analisando, setAnalisando] = useState(false);
+
+  function preencherExemplo(mensagem) {
+    if (analisando) return;
+    setCampos(previous => ({ ...previous, mensagem }));
+    setResposta('');
+    setErro('');
+    setAvisoHistorico('');
+    mensagemRef.current?.setCustomValidity('');
+    mensagemRef.current?.focus();
+  }
 
   async function analisar(evento) {
     evento.preventDefault();
@@ -52,6 +69,7 @@ export default function CreativeForm() {
               <textarea
                 id={campo.id}
                 name={campo.id}
+                ref={campo.id === 'mensagem' ? mensagemRef : null}
                 value={campos[campo.id] || ''}
                 onChange={evento => setCampos(previous => ({ ...previous, [campo.id]: evento.target.value }))}
                 rows={campo.linhas}
@@ -63,6 +81,20 @@ export default function CreativeForm() {
               />
             </div>
           ))}
+          <p className="ajuda exemplos-legenda">Teste com uma mensagem inventada:</p>
+          <div className="exemplos" role="group" aria-label="Exemplos de mensagens inventadas">
+            {exemplos.map(exemplo => (
+              <button
+                key={exemplo.nome}
+                type="button"
+                className="secundario exemplo-botao"
+                disabled={analisando}
+                onClick={() => preencherExemplo(exemplo.mensagem)}
+              >
+                {exemplo.nome}
+              </button>
+            ))}
+          </div>
           <button type="submit" disabled={analisando}>{analisando ? 'Analisando...' : desafio.botao}</button>
           <p className="ajuda">{desafio.aviso}</p>
         </form>

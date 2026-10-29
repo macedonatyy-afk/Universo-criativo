@@ -32,6 +32,9 @@ button:disabled { opacity: .6; cursor: wait; }
 button.secundario { background: transparent; color: var(--destaque); border: 2px solid var(--destaque); }
 button.secundario:hover { background: var(--lavanda); }
 .acoes-login { display: flex; flex-wrap: wrap; gap: 12px; }
+.exemplos-legenda { margin-bottom: 8px; }
+.exemplos { display: flex; flex-wrap: wrap; gap: 8px; }
+button.exemplo-botao { margin-top: 0; padding: 8px 12px; min-height: 44px; font-size: .875rem; }
 .erro { color: #a21c35; line-height: 1.5; }
 .ajuda { font-size: .9rem; line-height: 1.5; }
 .topo { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 24px; background: linear-gradient(110deg, var(--cartao), #f6f0fc); border-bottom: 1px solid var(--borda-roxa); }
