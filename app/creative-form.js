@@ -59,6 +59,7 @@ export default function CreativeForm() {
   return (
     <main className="pagina">
       <section className="cartao">
+        <p className="selo-halloween">Travessuras, sim. Golpes, não.</p>
         <h1>{desafio.nome}</h1>
         <p className="descricao">{desafio.subtitulo}</p>
         {desafio.modoTeste && <p className="ajuda">Modo de teste: a resposta é um exemplo. Nenhuma mensagem será enviada à IA.</p>}

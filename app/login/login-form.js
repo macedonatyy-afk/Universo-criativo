@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from 'react';
 import { authenticate } from './actions';
+import Link from 'next/link';
 
 export default function LoginForm({ configured }) {
   const [state, action, pending] = useActionState(authenticate, {});
@@ -27,6 +28,7 @@ export default function LoginForm({ configured }) {
         <button type="submit" name="intent" value="login" disabled={pending || !configured}>Entrar</button>
         <button type="submit" name="intent" value="signup" className="secundario" disabled={pending || !configured}>Criar conta</button>
       </div>
+      <Link href="/esqueci-minha-senha" className="link-recuperacao">Esqueci minha senha</Link>
       {pending && <p role="status">Aguarde...</p>}
       {state.error && <p className="erro" role="alert">{state.error}</p>}
       {state.message && <p role="status">{state.message}</p>}

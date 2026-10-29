@@ -29,7 +29,8 @@ export async function middleware(request) {
   }
 
   const pathname = request.nextUrl.pathname;
-  const destination = !user && (pathname === '/' || pathname === '/historico') ? '/login' :
+  const destination = !user && pathname === '/redefinir-senha' ? '/esqueci-minha-senha?erro=link' :
+    !user && (pathname === '/' || pathname === '/historico') ? '/login' :
     user && pathname === '/login' && request.method === 'GET' ? '/' : null;
 
   if (destination) {
@@ -40,4 +41,4 @@ export async function middleware(request) {
   return response;
 }
 
-export const config = { matcher: ['/', '/login', '/historico'] };
+export const config = { matcher: ['/', '/login', '/historico', '/redefinir-senha', '/ajuda'] };

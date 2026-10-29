@@ -17,6 +17,22 @@ Em `/login`, informe e-mail e senha e escolha **Entrar** ou **Criar conta**. Se 
 
 A página principal valida a sessão no servidor. O middleware renova os cookies de autenticação; no topo da página aparecem o e-mail da pessoa conectada e o botão **Sair**, que encerra a sessão deste navegador. Mensagens de autenticação são exibidas em português.
 
+### Recuperação de senha
+
+O link **Esqueci minha senha** abre `/esqueci-minha-senha`, que solicita o envio de um e-mail pelo Supabase. A confirmação é neutra e não revela se o e-mail tem uma conta. Abra o link no mesmo navegador em que iniciou o pedido, para preservar o verificador PKCE.
+
+No Supabase, em **Authentication → URL Configuration**, confirme a Site URL principal e autorize `https://universo-criativo-3hbh.vercel.app/auth/callback` em **Redirect URLs** (ou mantenha a regra `https://universo-criativo-3hbh.vercel.app/**` se já estiver cadastrada). Para desenvolvimento local, autorize também o callback do endereço local utilizado.
+
+O template padrão de **Reset Password** deve manter o link `{{ .ConfirmationURL }}`. O callback troca o código por uma sessão e abre `/redefinir-senha`; somente uma sessão validada pode atualizar a senha. Links inválidos ou expirados retornam ao pedido de recuperação, com erro em português. Para templates personalizados, o callback também aceita `token_hash` com `type=recovery`. O destino é sempre a página interna de nova senha, sem redirecionamento externo. A entrega real do e-mail depende da configuração e dos limites do Supabase.
+
+## Halloween e ajuda
+
+As páginas usam laranja, roxo e preto, com morcegos, teias, abóboras e um esqueleto decorativo. A fonte **Shadows Fright**, de Marvadesign, foi fornecida pelas autoras e fica em `public/fonts/shadows-fright.ttf`. Ela é carregada localmente por `next/font`, sem downloads de fonte durante o build ou acesso a serviços externos pelo navegador. Só os títulos maiores e a marca usam a fonte decorativa.
+
+As cortinas pretas abrem na primeira visita de cada aba e permanecem como decoração do rodapé. A animação dura menos de dois segundos, não captura cliques e é desativada com `prefers-reduced-motion`. As ilustrações decorativas são ignoradas pelos leitores de tela. Os botões de exemplo continuam preenchendo a mensagem sem iniciar uma análise automaticamente.
+
+A página pública `/ajuda` contém cinco passos para quem caiu em um golpe e pode ser acessada pelo topo e pelo rodapé, mesmo sem login. As orientações não prometem recuperar valores. Os testes de recuperação usam serviços simulados; valide o envio e a redefinição com uma conta de teste no Supabase real após publicar.
+
 Para validar a compilação, pare o servidor de desenvolvimento e execute `npm run build`. Não execute build e desenvolvimento simultaneamente, pois ambos usam `.next`. Para testar produção, execute `npm start` após o build.
 
 Para verificar os nomes de variáveis aceitos e a validação da configuração, execute `node --test tests/supabase-config.test.mjs` com Node.js 20.19+.
